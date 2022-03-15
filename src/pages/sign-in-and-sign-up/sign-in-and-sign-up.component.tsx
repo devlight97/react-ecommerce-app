@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAppSelector } from '../../redux/hooks';
+
 import { SignIn } from '../../components/sign-in/sign-in.component';
 import { SignUp } from '../../components/sign-up/sign-up.component';
 
@@ -12,8 +14,9 @@ interface IProps {
 
 export function SignInAndSignUpPage(props: IProps) {
   const navigate = useNavigate();
+  const currentUser = useAppSelector(state => state.user.currentUser);
   React.useEffect(() => {
-    if (props.currentUser) navigate('/');
+    if (currentUser) navigate('/');
   });
   return (
     <div className="sign-in-and-sign-up">

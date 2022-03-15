@@ -1,3 +1,4 @@
+import { IUser } from '../../models/users.model';
 import { SIGN_IN } from './user.types';
 
 export const count = (num: number) => ({
@@ -5,7 +6,7 @@ export const count = (num: number) => ({
   payload: { counter: num + 1 },
 });
 
-export const signIn = () => ({
+export const setCurrentUser = (currentUser: IUser | null) => ({
   type: SIGN_IN,
-  payload: { currentUser: null },
+  payload: { currentUser },
 });

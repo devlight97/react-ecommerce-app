@@ -4,6 +4,7 @@ import {
   getDoc,
   getDocs,
   query,
+  Timestamp,
   where,
 } from 'firebase/firestore';
 
@@ -12,7 +13,7 @@ import { getCollection } from '../firebase/firestore.factory';
 export interface IUser {
   displayName: string;
   email: string;
-  createAt?: Date;
+  createAt?: Timestamp;
   id?: string;
   authUid?: string;
 }
@@ -22,7 +23,7 @@ export class UserModel implements IUser {
     { email, displayName, authUid }: IUser
   ): Promise<IUser | undefined> => {
     const userCollection = getCollection('users');
-    const createAt = new Date();
+    const createAt = Timestamp.fromDate(new Date());
     try {
       const uid = await addDoc(
         userCollection,
@@ -59,7 +60,7 @@ export class UserModel implements IUser {
 
   public displayName: string;
   public email: string;
-  public createAt: Date;
+  public createAt: Timestamp;
   public id?: string;
   public authUid?: string;
   private userCollection: any = getCollection('users');

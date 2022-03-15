@@ -6,6 +6,7 @@
     ],
     "jsRules": {},
     "rules": {
+        "variable-name": false,
         "object-literal-sort-keys": false,
         "function-name": false,
         "trailing-comma": [
