@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { CustomButton } from '../custom-button/custom-button.component';
 
 import './collection-item.styles.scss';
 
@@ -22,6 +23,7 @@ export function CollectionItem({ id, name, price, imageUrl }: IProps) {
         <span className="name">{name}</span>
         <span className="price">{price}</span>
       </div>
+      <CustomButton>Add to cart</CustomButton>
     </div>
   );
 }

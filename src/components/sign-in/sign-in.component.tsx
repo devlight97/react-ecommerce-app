@@ -71,7 +71,7 @@ class InnerSignIn extends React.Component<IProps, IState> {
             </CustomButton>
             {/* </Link> */}
             <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
-              Sign in with Google
+              With Google
             </CustomButton>
           </div>
         </form>
