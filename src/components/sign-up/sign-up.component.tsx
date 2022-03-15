@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+import { UserService } from '../../services/user.service';
 
 import { CustomButton } from '../custom-button/custom-button.component';
 import { FormInput } from '../form-input/form-input.component';
@@ -31,19 +31,18 @@ export class SignUp extends React.Component<{}, IState> {
     event.preventDefault();
 
     const { displayName, email, password, confirmPassword } = this.state;
-
+    // console.log('displayname', displayName);
     if (password !== confirmPassword) {
       alert("passwords don't match");
       return;
     }
 
     try {
-      const { user } = await auth.createUserWithEmailAndPassword(
+      await UserService.signUp({
+        displayName,
         email,
-        password
-      );
-
-      await createUserProfileDocument(user, { displayName });
+        password,
+      });
 
       this.setState({
         displayName: '',

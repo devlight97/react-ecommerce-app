@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import { checkAuthStateChanged } from './firebase/firebase.utils';
 
 import { ErrorBoundary } from './components/error-boundary/error-boundary.component';
 import { Header } from './components/header/header.component';
@@ -9,16 +10,26 @@ import { HomePage } from './pages/homepage/homepage.component';
 import { ShopPage } from './pages/shop/shop.component';
 import { SignInAndSignUpPage } from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 
+import { UserModel } from './models/users.model';
+import { UserService } from './services/user.service';
+
+import { count } from './redux/user/user.actions';
+
 import './App.css';
 
 interface IState {
   currentUser: any;
 }
 
-export class App extends React.Component<{}, IState> {
+interface IProps {
+  counter: number;
+  setCount: any;
+}
+
+export class App extends React.Component<IProps, IState> {
   public unsubscribeFromAuth: any;
 
-  constructor(props: {}) {
+  constructor(props: IProps) {
     super(props);
 
     this.state = {
@@ -27,23 +38,15 @@ export class App extends React.Component<{}, IState> {
   }
 
   public componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth: any) => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-        if (!userRef) return;
-        userRef.onSnapshot((snapShot: any) => {
-          this.setState({
-            currentUser: {
-              id: snapShot.id,
-              ...snapShot.data(),
-            },
-          });
-
-          // console.log(this.state);
-        });
-      }
-
-      this.setState({ currentUser: userAuth });
+    this.unsubscribeFromAuth = checkAuthStateChanged(async (userAuth: any) => {
+      if (!userAuth) return this.setState({ currentUser: userAuth });
+      const { email, displayName, uid } = userAuth;
+      const userData = await UserService.signIn(new UserModel({
+        email, displayName, authUid: uid,
+      }));
+      this.setState({
+        currentUser: { ...userData },
+      });
     });
   }
 
@@ -60,7 +63,10 @@ export class App extends React.Component<{}, IState> {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/shop" element={<ShopPage />} />
-              <Route path="/signin" element={<SignInAndSignUpPage />} />
+              <Route
+                path="/signin"
+                element={<SignInAndSignUpPage currentUser={this.state.currentUser} />}
+              />
             </Routes>
           </BrowserRouter>
         </ErrorBoundary>
@@ -69,4 +75,11 @@ export class App extends React.Component<{}, IState> {
   }
 }
 
-export default App;
+const mapStateToProps = (state: any) => ({
+  counter: state.user.counter,
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+  setCount: (num: number) => dispatch(count(num)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,9 +1,11 @@
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { CustomButton } from '../custom-button/custom-button.component';
 import { FormInput } from '../form-input/form-input.component';
 
-import { signInWithGoogle } from '../../firebase/firebase.utils';
+import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
 
 import './sign-in.styles.scss';
 
@@ -13,8 +15,12 @@ interface IState {
   [name: string]: string;
 }
 
-export class SignIn extends React.Component<{}, IState> {
-  constructor(props: {}) {
+interface IProps {
+  navigate: any;
+}
+
+class InnerSignIn extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
 
     this.state = {
@@ -23,9 +29,11 @@ export class SignIn extends React.Component<{}, IState> {
     };
   }
 
-  public handleSubmit = (event: any) => {
+  public handleSubmit = async (event: any) => {
     event.preventDefault();
-    this.setState({ email: '', password: '' });
+    const { email, password } = this.state;
+    await signInWithEmailAndPassword(auth, email, password);
+    this.props.navigate('/');
   }
 
   public handleChange = (event: any) => {
@@ -57,7 +65,11 @@ export class SignIn extends React.Component<{}, IState> {
             required
           />
           <div className="buttons">
-            <CustomButton type="submit"> Sign in </CustomButton>
+            {/* <Link to="/"> */}
+            <CustomButton type="submit">
+              Sign in
+            </CustomButton>
+            {/* </Link> */}
             <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
               Sign in with Google
             </CustomButton>
@@ -66,6 +78,11 @@ export class SignIn extends React.Component<{}, IState> {
       </div>
     );
   }
+}
+
+export function SignIn(props: any) {
+  const navigate = useNavigate();
+  return <InnerSignIn navigate={navigate} {...props} />;
 }
 
 export default SignIn;
