@@ -1,4 +1,9 @@
-import { ACTIVE_CART, HIDDEN_CART, TOGGLE_CART } from './cart.types';
+import {
+  ACTIVE_CART,
+  ADD_ITEM,
+  HIDDEN_CART,
+  TOGGLE_CART,
+} from './cart.types';
 
 export const activeCart = () => ({
   type: ACTIVE_CART,
@@ -10,7 +15,11 @@ export const hiddenCart = () => ({
   payload: { isActive: false },
 });
 
-export const toggleCart = (isActive: boolean) => ({
+export const toggleCart = () => ({
   type: TOGGLE_CART,
-  payload: { isActive },
+});
+
+export const addItem = (item: any) => ({
+  type: ADD_ITEM,
+  payload: item,
 });

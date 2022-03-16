@@ -6,14 +6,20 @@ interface IProps {
   children: string;
   isGoogleSignIn?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  isClickable?: boolean;
   onClick?: (event: any) => void;
 }
 
 export function CustomButton(props: IProps) {
-  const { children, isGoogleSignIn, ...buttonProps } = props;
+  const { children, isGoogleSignIn, isClickable = true, ...buttonProps } = props;
   return (
     <button
-      className={`${isGoogleSignIn ? 'google-sign-in' : ''} custom-button`}
+      disabled={!isClickable}
+      className={`
+        ${isGoogleSignIn ? 'google-sign-in' : ''}
+        ${isClickable ? '' : 'blur-button'}
+        custom-button
+      `}
       {...buttonProps}
     >
       {children}

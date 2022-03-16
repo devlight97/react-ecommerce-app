@@ -10,7 +10,7 @@
   background-color: black;
   color: white;
   text-transform: uppercase;
-  font-family: 'Open Sans Condensed';
+  font-family: "Open Sans Condensed";
   font-weight: bolder;
   border: none;
   cursor: pointer;
@@ -29,5 +29,11 @@
       background-color: #357ae8;
       border: none;
     }
+  }
+
+  &.blur-button {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
   }
 }

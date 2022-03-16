@@ -9,14 +9,15 @@ import { toggleCart } from '../../redux/cart/cart.actions';
 import './cart-icon.styles.scss';
 
 export function CartIcon() {
-  const isActive = useAppSelector(state => state.cart.isActive);
+  const cartItems = useAppSelector(state => state.cart.cartItems);
   const dispatch = useAppDispatch();
+
   return (
     <div className="cart-icon"
-      onClick={() => dispatch(toggleCart(!isActive))}
+      onClick={() => dispatch(toggleCart())}
     >
       <ShoppingIcon className="shopping-icon" />
-      <span className="item-count">0</span>
+      <span className="item-count">{cartItems.length}</span>
     </div>
   );
 }

@@ -16,8 +16,8 @@ export function CollectionPreview({ title, items }: IProps) {
       <div className="preview">
         {items
           .filter((item, idx) => idx < 4)
-          .map(({ id, ...otherItemProps }) => (
-            <CollectionItem key={id} {...otherItemProps} />
+          .map((item: any) => (
+            <CollectionItem key={item.id} item={item} />
           ))}
       </div>
     </div>
